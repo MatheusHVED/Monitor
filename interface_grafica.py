@@ -8,7 +8,7 @@ import platform
 import psutil
 
 # Importa nossos módulos de monitoramento
-from cpu_monitor import obter_uso_cpu, obter_frequencia_cpu
+from cpu_monitor import obter_uso_cpu, obter_frequencia_cpu, obter_modelo_cpu
 from ram_monitor import obter_uso_ram, obter_swap
 from gpu_monitor import obter_uso_gpu
 from process_monitor import obter_processos_top, obter_processos_memoria
@@ -442,8 +442,8 @@ class MonitorHardware:
     
     def atualizar_cpu_detalhada(self, dados):
         """Atualiza a tela detalhada da CPU"""
-        
         # Atualiza informações gerais
+        self.label_cpu_modelo.config(text=f"Modelo: {obter_modelo_cpu()}")
         self.label_cpu_cores.config(text=f"Núcleos: {dados['numero_cores']}")
         self.label_cpu_freq.config(text=f"Frequência: {obter_frequencia_cpu()} MHz")
         self.label_cpu_uso_total.config(text=f"Uso Total: {dados['uso_total']}%")

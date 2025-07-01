@@ -1,4 +1,37 @@
 import psutil
+import platform
+import sys
+
+def obter_modelo_cpu():
+    # Windows
+    if sys.platform == "win32":
+        try:
+            import wmi
+            c = wmi.WMI()
+            for cpu in c.Win32_Processor():
+                return cpu.Name.strip()
+        except ImportError:
+            return platform.processor()
+    # Linux
+    elif sys.platform == "linux":
+        try:
+            with open("/proc/cpuinfo") as f:
+                for line in f:
+                    if "model name" in line:
+                        return line.split(":")[1].strip()
+        except:
+            pass
+        return platform.processor()
+    # Mac
+    elif sys.platform == "darwin":
+        import subprocess
+        try:
+            output = subprocess.check_output(["sysctl", "-n", "machdep.cpu.brand_string"])
+            return output.decode().strip()
+        except:
+            return platform.processor()
+    # Fallback
+    return platform.processor()
 
 def obter_uso_cpu():
     """
