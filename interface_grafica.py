@@ -124,6 +124,10 @@ class MonitorHardware:
         # Hora atual
         self.label_hora = tk.Label(sidebar, text="", bg='#18181b', fg='#888888', font=self.fonte_pequena)
         self.label_hora.pack(side='bottom', pady=10)
+        
+        so = platform.system()
+        versao = platform.release()
+        self.label_sistema.config(text=f"{so} {versao}")
     
     def criar_todas_telas(self):
         """Cria todas as telas do aplicativo"""
