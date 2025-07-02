@@ -70,8 +70,17 @@ class MonitorHardware:
         sidebar.pack_propagate(False)
 
         # Título
-        titulo = tk.Label(sidebar, text="MONITOR", bg='#18181b', fg='#4a9eff', font=self.fonte_titulo)
-        titulo.pack(pady=(30, 30))
+        title_container = tk.Frame(sidebar, bg='#18181b')
+        title_container.pack(pady=(30, 30))
+        titulo = tk.Label(
+            sidebar,
+            text="⚙️  Monitor",
+            bg='#18181b',
+            fg='#4a9eff',
+            font=self.fonte_titulo,
+            anchor='w'
+        )
+        titulo.pack(pady=(30, 30), padx=18, anchor='w')
 
         # Função para criar botão estilizado
         def criar_botao(parent, texto, icone, tela):
@@ -264,53 +273,122 @@ class MonitorHardware:
     def criar_tela_gpu(self):
         """Cria a tela detalhada da GPU"""
         
-        frame = tk.Frame(self.content_frame, bg='#1a1a1a')
+        frame = tk.Frame(self.content_frame, bg='#0f0f0f')
         
-        # Título
-        titulo = tk.Label(frame, text="Detalhes da GPU", 
-                         bg='#1a1a1a', fg='#4a9eff', font=self.fonte_titulo)
-        titulo.pack(pady=10)
+        # Container principal com padding
+        container = tk.Frame(frame, bg='#0f0f0f')
+        container.pack(fill='both', expand=True, padx=15, pady=15)
         
-        # Frame de informações
-        info_frame = tk.LabelFrame(frame, text="Informações da GPU", 
-                                 bg='#2a2a2a', fg='#4a9eff', 
-                                 font=self.fonte_subtitulo)
-        info_frame.pack(fill='x', pady=5)
+        # Título 
+        titulo = tk.Label(container, text="GPU Performance", 
+                         bg='#0f0f0f', fg='#ffffff', 
+                         font=('Segoe UI', 20, 'bold'))
+        titulo.pack(pady=(0, 20))
         
-        self.gpu_info_container = tk.Frame(info_frame, bg='#2a2a2a')
-        self.gpu_info_container.pack(fill='x', padx=10, pady=5)
+        # Cards de métricas principais
+        metrics_frame = tk.Frame(container, bg='#0f0f0f')
+        metrics_frame.pack(fill='x', pady=(0, 20))
         
-        # Labels da GPU
-        self.label_gpu_nome_det = tk.Label(self.gpu_info_container, text="Nome: Detectando...", 
-                                         bg='#2a2a2a', fg='#ffffff', font=self.fonte_normal)
-        self.label_gpu_nome_det.pack(anchor='w')
+        # Card de Uso
+        uso_card = tk.Frame(metrics_frame, bg='#1a1a1a')
+        uso_card.pack(side='left', fill='both', expand=True, padx=(0, 5))
         
-        self.label_gpu_uso_det = tk.Label(self.gpu_info_container, text="Uso: --%", 
-                                        bg='#2a2a2a', fg='#ff8c42', font=self.fonte_normal)
-        self.label_gpu_uso_det.pack(anchor='w')
+        tk.Label(uso_card, text="Uso GPU", bg='#1a1a1a', fg='#94a3b8', 
+                 font=('Segoe UI', 10)).pack(pady=(10, 0))
+        self.label_gpu_uso_card = tk.Label(uso_card, text="0%", bg='#1a1a1a', fg='#3b82f6', 
+                                          font=('Segoe UI', 18, 'bold'))
+        self.label_gpu_uso_card.pack(pady=(5, 10))
         
-        self.label_gpu_memoria_det = tk.Label(self.gpu_info_container, text="Memória: -- / -- MB", 
-                                            bg='#2a2a2a', fg='#ffffff', font=self.fonte_normal)
-        self.label_gpu_memoria_det.pack(anchor='w')
+        # Card de Memória
+        mem_card = tk.Frame(metrics_frame, bg='#1a1a1a')
+        mem_card.pack(side='left', fill='both', expand=True, padx=5)
         
-        self.label_gpu_temp = tk.Label(self.gpu_info_container, text="Temperatura: --°C", 
-                                     bg='#2a2a2a', fg='#ffffff', font=self.fonte_normal)
-        self.label_gpu_temp.pack(anchor='w')
+        tk.Label(mem_card, text="Memória", bg='#1a1a1a', fg='#94a3b8', 
+                 font=('Segoe UI', 10)).pack(pady=(10, 0))
+        self.label_gpu_mem_card = tk.Label(mem_card, text="0 GB", bg='#1a1a1a', fg='#10b981', 
+                                          font=('Segoe UI', 18, 'bold'))
+        self.label_gpu_mem_card.pack(pady=(5, 10))
         
-        # Frame para gráfico simples de uso
-        grafico_frame = tk.LabelFrame(frame, text="Histórico de Uso", 
-                                    bg='#2a2a2a', fg='#4a9eff', 
-                                    font=self.fonte_subtitulo)
-        grafico_frame.pack(fill='both', expand=True, pady=5)
+        # Card de Temperatura
+        temp_card = tk.Frame(metrics_frame, bg='#1a1a1a')
+        temp_card.pack(side='left', fill='both', expand=True, padx=(5, 0))
         
-        # Canvas para desenhar um gráfico simples
-        self.canvas_gpu = tk.Canvas(grafico_frame, bg='#1a1a1a', height=200)
-        self.canvas_gpu.pack(fill='both', expand=True, padx=10, pady=5)
+        tk.Label(temp_card, text="Temperatura", bg='#1a1a1a', fg='#94a3b8', 
+                 font=('Segoe UI', 10)).pack(pady=(10, 0))
+        self.label_gpu_temp_card = tk.Label(temp_card, text="0°C", bg='#1a1a1a', fg='#f59e0b', 
+                                           font=('Segoe UI', 18, 'bold'))
+        self.label_gpu_temp_card.pack(pady=(5, 10))
+        
+        # Informações detalhadas
+        info_frame = tk.Frame(container, bg='#1a1a1a')
+        info_frame.pack(fill='x', pady=(0, 20), ipady=15, ipadx=15)
+        
+        tk.Label(info_frame, text="Informações", bg='#1a1a1a', fg='#ffffff', 
+                 font=('Segoe UI', 12, 'bold')).pack(anchor='w', pady=(0, 10))
+        
+        # Labels das informações
+        self.label_gpu_nome_det = tk.Label(info_frame, text="Nome: Detectando...", 
+                                          bg='#1a1a1a', fg='#e2e8f0', 
+                                          font=('Segoe UI', 10))
+        self.label_gpu_nome_det.pack(anchor='w', pady=2)
+        
+        self.label_gpu_uso_det = tk.Label(info_frame, text="Uso: --%", 
+                                         bg='#1a1a1a', fg='#e2e8f0', 
+                                         font=('Segoe UI', 10))
+        self.label_gpu_uso_det.pack(anchor='w', pady=2)
+        
+        self.label_gpu_memoria_det = tk.Label(info_frame, text="Memória: -- / -- MB", 
+                                             bg='#1a1a1a', fg='#e2e8f0', 
+                                             font=('Segoe UI', 10))
+        self.label_gpu_memoria_det.pack(anchor='w', pady=2)
+        
+        self.label_gpu_temp = tk.Label(info_frame, text="Temperatura: --°C", 
+                                      bg='#1a1a1a', fg='#e2e8f0', 
+                                      font=('Segoe UI', 10))
+        self.label_gpu_temp.pack(anchor='w', pady=2)
+        
+        # Gráfico
+        grafico_frame = tk.Frame(container, bg='#1a1a1a')
+        grafico_frame.pack(fill='both', expand=True, ipady=15, ipadx=15)
+        
+        tk.Label(grafico_frame, text="Histórico de Uso", bg='#1a1a1a', fg='#ffffff', 
+                 font=('Segoe UI', 12, 'bold')).pack(anchor='w', pady=(0, 10))
+        
+        # Canvas para o gráfico
+        self.canvas_gpu = tk.Canvas(grafico_frame, bg='#0f0f0f', height=200)
+        self.canvas_gpu.pack(fill='both', expand=True)
         
         # Lista para armazenar histórico de uso
         self.historico_gpu = []
         
         return frame
+
+    def atualizar_cards_gpu(self, uso=None, memoria_usada=None, memoria_total=None, temperatura=None):
+        """Atualiza os cards de métricas de forma simples"""
+        
+        if uso is not None:
+            self.label_gpu_uso_card.config(text=f"{uso:.1f}%")
+            # Muda cor baseado no uso
+            cor = "#ef4444" if uso > 80 else "#f59e0b" if uso > 50 else "#10b981"
+            self.label_gpu_uso_card.config(fg=cor)
+        
+        if memoria_usada is not None and memoria_total is not None:
+            mem_gb = memoria_usada / 1024
+            self.label_gpu_mem_card.config(text=f"{mem_gb:.1f} GB")
+        
+        if temperatura is not None:
+            self.label_gpu_temp_card.config(text=f"{temperatura}°C")
+            # Muda cor baseado na temperatura
+            cor = "#ef4444" if temperatura > 80 else "#f59e0b" if temperatura > 70 else "#10b981"
+            self.label_gpu_temp_card.config(fg=cor)
+    
+    def atualizar_cores_sidebar(self):
+        for tela, (btn, lbl_icone, lbl_texto) in self.botoes_nav.items():
+            cor = '#4a9eff' if tela == self.tela_atual else '#23232b'
+            fg = '#fff' if tela == self.tela_atual else '#f3f3f3'
+            btn.config(bg=cor)
+            lbl_icone.config(bg=cor, fg=fg)
+            lbl_texto.config(bg=cor, fg=fg)
     
     def criar_tela_ram(self):
         """Cria a tela detalhada da RAM"""
@@ -479,47 +557,32 @@ class MonitorHardware:
     
     def atualizar_gpu_detalhada(self, dados):
         """Atualiza a tela detalhada da GPU"""
-        
         if dados['disponivel']:
             self.label_gpu_nome_det.config(text=f"Nome: {dados['nome']}")
             self.label_gpu_uso_det.config(text=f"Uso: {dados['uso_porcentagem']}%")
             self.label_gpu_memoria_det.config(text=f"Memória: {dados['memoria_usada_mb']} / {dados['memoria_total_mb']} MB")
             self.label_gpu_temp.config(text=f"Temperatura: {dados['temperatura']}°C")
-            
+
+            # Atualiza os CARDS principais
+            self.atualizar_cards_gpu(
+                uso=dados['uso_porcentagem'],
+                memoria_usada=dados['memoria_usada_mb'],
+                memoria_total=dados['memoria_total_mb'],
+                temperatura=dados['temperatura']
+            )
+
             # Atualiza histórico e gráfico
             self.historico_gpu.append(dados['uso_porcentagem'])
             if len(self.historico_gpu) > 50:  # Mantém apenas últimos 50 valores
                 self.historico_gpu.pop(0)
-            
             self.desenhar_grafico_gpu()
         else:
             self.label_gpu_nome_det.config(text="Nome: GPU não detectada")
             self.label_gpu_uso_det.config(text="Uso: N/A")
             self.label_gpu_memoria_det.config(text="Memória: N/A")
             self.label_gpu_temp.config(text="Temperatura: N/A")
-    
-    def desenhar_grafico_gpu(self):
-        """Desenha um gráfico simples do uso da GPU"""
-        
-        self.canvas_gpu.delete("all")
-        
-        if len(self.historico_gpu) < 2:
-            return
-        
-        width = self.canvas_gpu.winfo_width()
-        height = self.canvas_gpu.winfo_height()
-        
-        if width <= 1 or height <= 1:
-            return
-        
-        # Desenha linhas do gráfico
-        for i in range(len(self.historico_gpu) - 1):
-            x1 = (i / (len(self.historico_gpu) - 1)) * width
-            y1 = height - (self.historico_gpu[i] / 100) * height
-            x2 = ((i + 1) / (len(self.historico_gpu) - 1)) * width
-            y2 = height - (self.historico_gpu[i + 1] / 100) * height
-            
-            self.canvas_gpu.create_line(x1, y1, x2, y2, fill='#4a9eff', width=2)
+            # Zera os cards
+            self.atualizar_cards_gpu(uso=0, memoria_usada=0, memoria_total=0, temperatura=0)
     
     def atualizar_ram_detalhada(self, ram, swap, processos):
         """Atualiza a tela detalhada da RAM"""
@@ -562,13 +625,156 @@ class MonitorHardware:
         self.root.quit()
         self.root.destroy()
 
-    def atualizar_cores_sidebar(self):
-        for tela, (btn, lbl_icone, lbl_texto) in self.botoes_nav.items():
-            cor = '#4a9eff' if tela == self.tela_atual else '#23232b'
-            fg = '#fff' if tela == self.tela_atual else '#f3f3f3'
-            btn.config(bg=cor)
-            lbl_icone.config(bg=cor, fg=fg)
-            lbl_texto.config(bg=cor, fg=fg)
+    def desenhar_grafico_gpu(self):
+        """Desenha um gráfico moderno, minimalista e polido do uso da GPU"""
+        self.canvas_gpu.delete("all")
+
+        if len(self.historico_gpu) < 2:
+            self._desenhar_estado_vazio()
+            return
+
+        width = self.canvas_gpu.winfo_width()
+        height = self.canvas_gpu.winfo_height()
+
+        if width <= 1 or height <= 1:
+            return
+
+        # Margens para um visual mais limpo
+        margin_x = 20
+        margin_y = 15
+        chart_width = width - (2 * margin_x)
+        chart_height = height - (2 * margin_y)
+
+        # Fundo escuro sutil
+        self.canvas_gpu.create_rectangle(0, 0, width, height, fill='#18181b', outline='')
+
+        # Grid minimalista
+        self._desenhar_grid_moderno(margin_x, margin_y, chart_width, chart_height)
+
+        # Curva suavizada
+        pontos = self._calcular_pontos_suavizados(margin_x, margin_y, chart_width, chart_height)
+
+        # Área sob a curva com camadas de azul
+        self._desenhar_area_azul(pontos, margin_x, margin_y, chart_height)
+
+        # Linha principal com sombra
+        self._desenhar_linha_com_sombra(pontos)
+
+        # Pontos de destaque nos extremos
+        self._desenhar_pontos_destaque(pontos)
+
+        # Labels de valores
+        self._desenhar_labels_valores(margin_x, margin_y, chart_width, chart_height)
+
+    def _desenhar_estado_vazio(self):
+        width = self.canvas_gpu.winfo_width()
+        height = self.canvas_gpu.winfo_height()
+        self.canvas_gpu.create_text(
+            width//2, height//2,
+            text="Coletando dados...",
+            fill='#6b7280',
+            font=('Arial', 11),
+            anchor='center'
+        )
+
+    def _desenhar_grid_moderno(self, margin_x, margin_y, chart_width, chart_height):
+        # Linhas horizontais principais (0%, 50%, 100%)
+        for percent, cor in zip([0, 50, 100], ['#23232b', '#333', '#23232b']):
+            y = margin_y + chart_height - (percent / 100) * chart_height
+            self.canvas_gpu.create_line(
+                margin_x, y, margin_x + chart_width, y,
+                fill=cor, width=1
+            )
+        # Linhas verticais sutis
+        num_vertical_lines = 5
+        for i in range(1, num_vertical_lines):
+            x = margin_x + (chart_width / num_vertical_lines) * i
+            self.canvas_gpu.create_line(
+                x, margin_y, x, margin_y + chart_height,
+                fill='#23232b', width=1
+            )
+
+    def _calcular_pontos_suavizados(self, margin_x, margin_y, chart_width, chart_height):
+        pontos = []
+        dados_suavizados = []
+        window_size = min(3, len(self.historico_gpu))
+        for i in range(len(self.historico_gpu)):
+            start_idx = max(0, i - window_size // 2)
+            end_idx = min(len(self.historico_gpu), i + window_size // 2 + 1)
+            avg = sum(self.historico_gpu[start_idx:end_idx]) / (end_idx - start_idx)
+            dados_suavizados.append(avg)
+        for i, valor in enumerate(dados_suavizados):
+            x = margin_x + (i / (len(dados_suavizados) - 1)) * chart_width
+            y = margin_y + chart_height - (valor / 100) * chart_height
+            pontos.append((x, y))
+        return pontos
+
+    def _desenhar_area_azul(self, pontos, margin_x, margin_y, chart_height):
+        if len(pontos) < 2:
+            return
+        area_points = [(p[0], p[1]) for p in pontos]
+        area_points.append((pontos[-1][0], margin_y + chart_height))
+        area_points.append((pontos[0][0], margin_y + chart_height))
+        # Camadas de azul para simular profundidade
+        colors = ['#4a9eff', '#93c5fd', '#dbeafe']
+        for i, color in enumerate(colors):
+            offset = i * 2
+            adjusted_points = [(x, y + offset) for (x, y) in area_points]
+            flat_points = [coord for point in adjusted_points for coord in point]
+            self.canvas_gpu.create_polygon(flat_points, fill=color, outline='')
+
+    def _desenhar_linha_com_sombra(self, pontos):
+        if len(pontos) < 2:
+            return
+        # Sombra da linha (offset)
+        for i in range(len(pontos) - 1):
+            self.canvas_gpu.create_line(
+                pontos[i][0] + 1, pontos[i][1] + 1,
+                pontos[i+1][0] + 1, pontos[i+1][1] + 1,
+                fill='#222', width=4, smooth=True
+            )
+        # Linha principal
+        for i in range(len(pontos) - 1):
+            self.canvas_gpu.create_line(
+                pontos[i][0], pontos[i][1],
+                pontos[i+1][0], pontos[i+1][1],
+                fill='#4a9eff', width=3, smooth=True,
+                capstyle='round', joinstyle='round'
+            )
+
+    def _desenhar_pontos_destaque(self, pontos):
+        if len(pontos) < 2:
+            return
+        for ponto in [pontos[0], pontos[-1]]:
+            x, y = ponto
+            self.canvas_gpu.create_oval(
+                x-6, y-6, x+6, y+6,
+                fill='#dbeafe', outline='#4a9eff', width=2
+            )
+            self.canvas_gpu.create_oval(
+                x-3, y-3, x+3, y+3,
+                fill='#4a9eff', outline=''
+            )
+
+    def _desenhar_labels_valores(self, margin_x, margin_y, chart_width, chart_height):
+        for percent in [0, 50, 100]:
+            y = margin_y + chart_height - (percent / 100) * chart_height
+            self.canvas_gpu.create_text(
+                margin_x - 5, y,
+                text=f"{percent}%",
+                fill='#6b7280',
+                font=('Arial', 9),
+                anchor='e'
+            )
+        if self.historico_gpu:
+            valor_atual = self.historico_gpu[-1]
+            self.canvas_gpu.create_text(
+                margin_x + chart_width, margin_y,
+                text=f"{valor_atual:.1f}%",
+                fill='#4a9eff',
+                font=('Arial', 12, 'bold'),
+                anchor='ne'
+            )
 
 # Executa a aplicação se este arquivo for rodado diretamente
 if __name__ == "__main__":
