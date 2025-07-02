@@ -45,4 +45,4 @@ Um monitor de hardware feito em Python com Tkinter e psutil.
 - `interface_grafica.py` — Interface principal e lógica de exibição
 - `cpu_monitor.py`, `gpu_monitor.py`, `ram_monitor.py`, `process_monitor.py` — Coleta de dados dos componentes
 
-## Desenvolvido por [Gustavo Oestreich, Leonardo Saquet, Matheus Marcusso] — Projeto acadêmico.
+## Desenvolvido por [Gustavo Oestreich, Leonardo Saquet, Matheus Marcusso, Victor Weiss] — Projeto acadêmico.
