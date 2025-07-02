@@ -230,48 +230,51 @@ class MonitorHardware:
         
         frame = tk.Frame(self.content_frame, bg='#1a1a1a')
         
-        # Título
-        titulo = tk.Label(frame, text="Detalhes da CPU", 
-                         bg='#1a1a1a', fg='#4a9eff', font=self.fonte_titulo)
-        titulo.pack(pady=10)
+        titulo = tk.Label(frame, text="CPU", 
+                         bg='#1a1a1a', fg='#ffffff', font=("Segoe UI", 20, "bold"))
+        titulo.pack(pady=(0, 20))
         
-        # Frame superior com informações gerais
-        info_frame = tk.LabelFrame(frame, text="Informações Gerais", 
-                                 bg='#2a2a2a', fg='#4a9eff', 
-                                 font=self.fonte_subtitulo)
-        info_frame.pack(fill='x', pady=5)
+        # Cards principais
+        cards_frame = tk.Frame(frame, bg='#1a1a1a')
+        cards_frame.pack(fill='x', pady=(0, 20))
         
-        # Labels de informações
-        self.cpu_info_frame = tk.Frame(info_frame, bg='#2a2a2a')
-        self.cpu_info_frame.pack(fill='x', padx=10, pady=5)
+        # Card Modelo
+        card_modelo = tk.Frame(cards_frame, bg='#23232b', relief='ridge', bd=1)
+        card_modelo.pack(side='left', fill='both', expand=True, padx=(0, 8), pady=5)
+        tk.Label(card_modelo, text="Modelo", bg='#23232b', fg='#94a3b8', font=self.fonte_pequena).pack(pady=(10, 0))
+        self.label_cpu_modelo = tk.Label(card_modelo, text=f"{self.dados_estaticos['cpu_modelo']}", bg='#23232b', fg='#4a9eff', font=("Arial", 14, "bold"), wraplength=180, justify='center')
+        self.label_cpu_modelo.pack(pady=(2, 10))
         
-        self.label_cpu_modelo = tk.Label(self.cpu_info_frame, text=f"Modelo: {self.dados_estaticos['cpu_modelo']}", 
-                                       bg='#2a2a2a', fg='#ffffff', font=self.fonte_normal)
-        self.label_cpu_modelo.pack(anchor='w')
+        # Card Núcleos
+        card_cores = tk.Frame(cards_frame, bg='#23232b', relief='ridge', bd=1)
+        card_cores.pack(side='left', fill='both', expand=True, padx=8, pady=5)
+        tk.Label(card_cores, text="Núcleos", bg='#23232b', fg='#94a3b8', font=self.fonte_pequena).pack(pady=(10, 0))
+        self.label_cpu_cores = tk.Label(card_cores, text=f"{self.dados_estaticos['cpu_cores']}", bg='#23232b', fg='#4eff4a', font=("Arial", 18, "bold"))
+        self.label_cpu_cores.pack(pady=(2, 10))
         
-        self.label_cpu_cores = tk.Label(self.cpu_info_frame, text=f"Núcleos: {self.dados_estaticos['cpu_cores']}", 
-                                      bg='#2a2a2a', fg='#ffffff', font=self.fonte_normal)
-        self.label_cpu_cores.pack(anchor='w')
+        # Card Frequência
+        card_freq = tk.Frame(cards_frame, bg='#23232b', relief='ridge', bd=1)
+        card_freq.pack(side='left', fill='both', expand=True, padx=(8, 0), pady=5)
+        tk.Label(card_freq, text="Frequência", bg='#23232b', fg='#94a3b8', font=self.fonte_pequena).pack(pady=(10, 0))
+        self.label_cpu_freq = tk.Label(card_freq, text="-- MHz", bg='#23232b', fg='#ff8c42', font=("Arial", 18, "bold"))
+        self.label_cpu_freq.pack(pady=(2, 10))
         
-        self.label_cpu_freq = tk.Label(self.cpu_info_frame, text="Frequência: -- MHz", 
-                                     bg='#2a2a2a', fg='#ffffff', font=self.fonte_normal)
-        self.label_cpu_freq.pack(anchor='w')
+        # Uso total em destaque
+        percent_frame = tk.Frame(frame, bg='#1a1a1a')
+        percent_frame.pack(fill='x', pady=(0, 20))
+        self.label_cpu_uso_total = tk.Label(percent_frame, text="Uso Total: --%", 
+                                            bg='#1a1a1a', fg='#4a9eff', font=("Arial", 16, "bold"))
+        self.label_cpu_uso_total.pack(anchor='center', pady=5)
         
-        self.label_cpu_uso_total = tk.Label(self.cpu_info_frame, text="Uso Total: --%", 
-                                          bg='#2a2a2a', fg='#ff8c42', font=self.fonte_normal)
-        self.label_cpu_uso_total.pack(anchor='w')
+        # Grade de uso por núcleo
+        nucleos_frame = tk.LabelFrame(frame, text="Uso por Núcleo", 
+                                     bg='#2a2a2a', fg='#4a9eff', 
+                                     font=self.fonte_subtitulo)
+        nucleos_frame.pack(fill='both', expand=True, padx=0, pady=5)
         
-        # Frame dos núcleos
-        cores_frame = tk.LabelFrame(frame, text="Uso por Núcleo", 
-                                  bg='#2a2a2a', fg='#4a9eff', 
-                                  font=self.fonte_subtitulo)
-        cores_frame.pack(fill='both', expand=True, pady=5)
+        self.cpu_cores_container = tk.Frame(nucleos_frame, bg='#2a2a2a')
+        self.cpu_cores_container.pack(fill='both', expand=True, padx=10, pady=10)
         
-        # Container dos cores
-        self.cpu_cores_container = tk.Frame(cores_frame, bg='#2a2a2a')
-        self.cpu_cores_container.pack(fill='both', expand=True, padx=10, pady=5)
-        
-        # Lista será criada dinamicamente baseada no número de cores
         self.labels_cpu_cores = []
         
         return frame
@@ -401,40 +404,48 @@ class MonitorHardware:
         
         frame = tk.Frame(self.content_frame, bg='#1a1a1a')
         
-        # Título
-        titulo = tk.Label(frame, text="Detalhes da Memória RAM", 
-                         bg='#1a1a1a', fg='#4a9eff', font=self.fonte_titulo)
-        titulo.pack(pady=10)
+        titulo = tk.Label(frame, text="Memória RAM", 
+                         bg='#1a1a1a', fg='#ffffff', font=("Segoe UI", 20, "bold"))
+        titulo.pack(pady=(0, 20))
         
-        # Frame de informações da RAM
-        ram_frame = tk.LabelFrame(frame, text="Memória Principal", 
-                                bg='#2a2a2a', fg='#4a9eff', 
-                                font=self.fonte_subtitulo)
-        ram_frame.pack(fill='x', pady=5)
+        # Cards principais
+        cards_frame = tk.Frame(frame, bg='#1a1a1a')
+        cards_frame.pack(fill='x', pady=(0, 20))
         
-        self.ram_info_container = tk.Frame(ram_frame, bg='#2a2a2a')
-        self.ram_info_container.pack(fill='x', padx=10, pady=5)
+        # Card Total
+        card_total = tk.Frame(cards_frame, bg='#23232b', relief='ridge', bd=1)
+        card_total.pack(side='left', fill='both', expand=True, padx=(0, 8), pady=5)
+        tk.Label(card_total, text="Total", bg='#23232b', fg='#94a3b8', font=self.fonte_pequena).pack(pady=(10, 0))
+        self.label_ram_total = tk.Label(card_total, text="-- GB", bg='#23232b', fg='#4a9eff', font=("Arial", 18, "bold"))
+        self.label_ram_total.pack(pady=(2, 10))
         
-        # Labels da RAM
-        self.label_ram_total = tk.Label(self.ram_info_container, text="Total: -- GB", 
-                                      bg='#2a2a2a', fg='#ffffff', font=self.fonte_normal)
-        self.label_ram_total.pack(anchor='w')
+        # Card Usada
+        card_usada = tk.Frame(cards_frame, bg='#23232b', relief='ridge', bd=1)
+        card_usada.pack(side='left', fill='both', expand=True, padx=8, pady=5)
+        tk.Label(card_usada, text="Usada", bg='#23232b', fg='#94a3b8', font=self.fonte_pequena).pack(pady=(10, 0))
+        self.label_ram_usada = tk.Label(card_usada, text="-- GB", bg='#23232b', fg='#ff8c42', font=("Arial", 18, "bold"))
+        self.label_ram_usada.pack(pady=(2, 10))
         
-        self.label_ram_usada = tk.Label(self.ram_info_container, text="Usada: -- GB", 
-                                      bg='#2a2a2a', fg='#ff8c42', font=self.fonte_normal)
-        self.label_ram_usada.pack(anchor='w')
+        # Card Livre
+        card_livre = tk.Frame(cards_frame, bg='#23232b', relief='ridge', bd=1)
+        card_livre.pack(side='left', fill='both', expand=True, padx=8, pady=5)
+        tk.Label(card_livre, text="Livre", bg='#23232b', fg='#94a3b8', font=self.fonte_pequena).pack(pady=(10, 0))
+        self.label_ram_livre = tk.Label(card_livre, text="-- GB", bg='#23232b', fg='#4eff4a', font=("Arial", 18, "bold"))
+        self.label_ram_livre.pack(pady=(2, 10))
         
-        self.label_ram_livre = tk.Label(self.ram_info_container, text="Livre: -- GB", 
-                                      bg='#2a2a2a', fg='#4eff4a', font=self.fonte_normal)
-        self.label_ram_livre.pack(anchor='w')
+        # Card Tipo
+        card_tipo = tk.Frame(cards_frame, bg='#23232b', relief='ridge', bd=1)
+        card_tipo.pack(side='left', fill='both', expand=True, padx=(8, 0), pady=5)
+        tk.Label(card_tipo, text="Tipo", bg='#23232b', fg='#94a3b8', font=self.fonte_pequena).pack(pady=(10, 0))
+        self.label_ram_tipo = tk.Label(card_tipo, text=f"{self.dados_estaticos['tipo_ram']}", bg='#23232b', fg='#4a9eff', font=("Arial", 18, "bold"))
+        self.label_ram_tipo.pack(pady=(2, 10))
         
-        self.label_ram_percent = tk.Label(self.ram_info_container, text="Porcentagem: --%", 
-                                        bg='#2a2a2a', fg='#ff8c42', font=self.fonte_normal)
-        self.label_ram_percent.pack(anchor='w')
-
-        self.label_ram_tipo = tk.Label(self.ram_info_container, text=f"Tipo: {self.dados_estaticos['tipo_ram']}", 
-                                       bg='#2a2a2a', fg='#4a9eff', font=self.fonte_normal)
-        self.label_ram_tipo.pack(anchor='w')
+        # Porcentagem usada (destaque)
+        percent_frame = tk.Frame(frame, bg='#1a1a1a')
+        percent_frame.pack(fill='x', pady=(0, 20))
+        self.label_ram_percent = tk.Label(percent_frame, text="Porcentagem: --%", 
+                                          bg='#1a1a1a', fg='#ff8c42', font=("Arial", 16, "bold"))
+        self.label_ram_percent.pack(anchor='center', pady=5)
         
         # Frame do Swap
         swap_frame = tk.LabelFrame(frame, text="Memória Swap", 
@@ -534,35 +545,33 @@ class MonitorHardware:
     
     def atualizar_cpu_detalhada(self, dados):
         """Atualiza a tela detalhada da CPU"""
-        # Atualiza informações gerais
-        self.label_cpu_modelo.config(text=f"Modelo: {self.dados_estaticos['cpu_modelo']}")
-        self.label_cpu_cores.config(text=f"Núcleos: {self.dados_estaticos['cpu_cores']}")
-        self.label_cpu_freq.config(text=f"Frequência: {obter_frequencia_cpu()} MHz")
+        self.label_cpu_modelo.config(text=f"{self.dados_estaticos['cpu_modelo']}")
+        self.label_cpu_cores.config(text=f"{self.dados_estaticos['cpu_cores']}")
+        self.label_cpu_freq.config(text=f"{obter_frequencia_cpu()} MHz")
         self.label_cpu_uso_total.config(text=f"Uso Total: {dados['uso_total']}%")
         
-        # Atualiza cores (cria se necessário)
-        if len(self.labels_cpu_cores) != dados['numero_cores']:
-            # Limpa container
+        # Grade responsiva para núcleos
+        num_cores = dados['numero_cores']
+        cores_por_linha = 4 if num_cores > 4 else num_cores
+        if len(self.labels_cpu_cores) != num_cores:
             for widget in self.cpu_cores_container.winfo_children():
                 widget.destroy()
             self.labels_cpu_cores.clear()
-            
-            # Cria novos labels para cores
-            for i in range(dados['numero_cores']):
-                core_frame = tk.Frame(self.cpu_cores_container, bg='#3a3a3a', relief='ridge', bd=1)
-                core_frame.pack(fill='x', pady=2)
-                
-                label = tk.Label(core_frame, text=f"Core {i}: {dados['uso_por_core'][i]}%", 
-                               bg='#3a3a3a', fg='#ffffff', font=self.fonte_normal)
-                label.pack(padx=10, pady=5)
-                
+            for i in range(num_cores):
+                row = i // cores_por_linha
+                col = i % cores_por_linha
+                core_frame = tk.Frame(self.cpu_cores_container, bg='#23232b', relief='ridge', bd=1)
+                core_frame.grid(row=row, column=col, padx=8, pady=8, sticky='nsew')
+                label = tk.Label(core_frame, text=f"Core {i}: --%", 
+                                 bg='#23232b', fg='#ffffff', font=("Arial", 13, "bold"), width=12)
+                label.pack(padx=10, pady=10)
                 self.labels_cpu_cores.append(label)
-        
-        # Atualiza valores dos cores
+            for col in range(cores_por_linha):
+                self.cpu_cores_container.grid_columnconfigure(col, weight=1)
         for i, label in enumerate(self.labels_cpu_cores):
             if i < len(dados['uso_por_core']):
                 uso = dados['uso_por_core'][i]
-                cor = '#ff4444' if uso > 80 else '#ff8c42' if uso > 50 else '#ffffff'
+                cor = '#ff4444' if uso > 80 else '#ff8c42' if uso > 50 else '#4a9eff'
                 label.config(text=f"Core {i}: {uso}%", fg=cor)
     
     def atualizar_gpu_detalhada(self, dados):
