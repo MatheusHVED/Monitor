@@ -35,6 +35,12 @@ class MonitorHardware:
         
         self.botoes_nav = {}  # <-- Mova esta linha para cá, antes de criar a interface
         
+        # Coleta e salva dados estáticos só uma vez
+        self.dados_estaticos = {}
+        self.dados_estaticos['tipo_ram'] = obter_uso_ram()['tipo_ram']
+        self.dados_estaticos['cpu_modelo'] = obter_modelo_cpu()
+        self.dados_estaticos['cpu_cores'] = psutil.cpu_count()
+        
         # Cria a interface
         self.criar_interface()
         
@@ -239,11 +245,11 @@ class MonitorHardware:
         self.cpu_info_frame = tk.Frame(info_frame, bg='#2a2a2a')
         self.cpu_info_frame.pack(fill='x', padx=10, pady=5)
         
-        self.label_cpu_modelo = tk.Label(self.cpu_info_frame, text="Modelo: Detectando...", 
+        self.label_cpu_modelo = tk.Label(self.cpu_info_frame, text=f"Modelo: {self.dados_estaticos['cpu_modelo']}", 
                                        bg='#2a2a2a', fg='#ffffff', font=self.fonte_normal)
         self.label_cpu_modelo.pack(anchor='w')
         
-        self.label_cpu_cores = tk.Label(self.cpu_info_frame, text="Núcleos: --", 
+        self.label_cpu_cores = tk.Label(self.cpu_info_frame, text=f"Núcleos: {self.dados_estaticos['cpu_cores']}", 
                                       bg='#2a2a2a', fg='#ffffff', font=self.fonte_normal)
         self.label_cpu_cores.pack(anchor='w')
         
@@ -425,6 +431,10 @@ class MonitorHardware:
         self.label_ram_percent = tk.Label(self.ram_info_container, text="Porcentagem: --%", 
                                         bg='#2a2a2a', fg='#ff8c42', font=self.fonte_normal)
         self.label_ram_percent.pack(anchor='w')
+
+        self.label_ram_tipo = tk.Label(self.ram_info_container, text=f"Tipo: {self.dados_estaticos['tipo_ram']}", 
+                                       bg='#2a2a2a', fg='#4a9eff', font=self.fonte_normal)
+        self.label_ram_tipo.pack(anchor='w')
         
         # Frame do Swap
         swap_frame = tk.LabelFrame(frame, text="Memória Swap", 
@@ -525,8 +535,8 @@ class MonitorHardware:
     def atualizar_cpu_detalhada(self, dados):
         """Atualiza a tela detalhada da CPU"""
         # Atualiza informações gerais
-        self.label_cpu_modelo.config(text=f"Modelo: {obter_modelo_cpu()}")
-        self.label_cpu_cores.config(text=f"Núcleos: {dados['numero_cores']}")
+        self.label_cpu_modelo.config(text=f"Modelo: {self.dados_estaticos['cpu_modelo']}")
+        self.label_cpu_cores.config(text=f"Núcleos: {self.dados_estaticos['cpu_cores']}")
         self.label_cpu_freq.config(text=f"Frequência: {obter_frequencia_cpu()} MHz")
         self.label_cpu_uso_total.config(text=f"Uso Total: {dados['uso_total']}%")
         
@@ -592,7 +602,7 @@ class MonitorHardware:
         self.label_ram_usada.config(text=f"Usada: {ram['usada_gb']} GB")
         self.label_ram_livre.config(text=f"Livre: {ram['disponivel_gb']} GB")
         self.label_ram_percent.config(text=f"Porcentagem: {ram['porcentagem_usada']}%")
-        
+
         # Atualiza informações do swap
         self.label_swap_info.config(text=f"Swap: {swap['usada_gb']} / {swap['total_gb']} GB ({swap['porcentagem']}%)")
         
